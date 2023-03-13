@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./pkg/pb";
+
+service User {
+  rpc AddName (AddNameRequest) returns (AddNameResponse) {}
+  rpc AddPhone (AddPhoneRequest) returns (AddPhoneResponse) {}
+
+  rpc IsAdmin (IsAdminRequest) returns (IsAdminResponse) {}
+
+  rpc GetUsersByChatId (GetUsersByChatIdRequest) returns (GetUsersByChatIdResponse) {}
+}
+
+message AddNameRequest {
+  int64 chatId = 1;
+  string username = 2;
+  string name = 3;
+}
+
+message AddNameResponse {
+  string message = 1;
+}
+
+message AddPhoneRequest {
+  int64 chatId = 1;
+  string phone = 2;
+}
+
+message AddPhoneResponse {
+  string message = 1;
+}
+
+message IsAdminRequest {
+  int64 chatId = 1;
+}
+
+message IsAdminResponse {
+  bool isAdmin = 1;
+}
+
+message GetUsersByChatIdRequest {
+  repeated int64 chatId = 1;
+}
+
+message UserData {
+  string username = 1;
+  string name = 2;
+  string phone = 3;
+}
+
+message GetUsersByChatIdResponse {
+  repeated UserData data = 1;
+}
