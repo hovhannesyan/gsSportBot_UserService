@@ -25,7 +25,7 @@ type UserClient interface {
 	AddName(ctx context.Context, in *AddNameRequest, opts ...grpc.CallOption) (*AddNameResponse, error)
 	AddPhone(ctx context.Context, in *AddPhoneRequest, opts ...grpc.CallOption) (*AddPhoneResponse, error)
 	IsAdmin(ctx context.Context, in *IsAdminRequest, opts ...grpc.CallOption) (*IsAdminResponse, error)
-	GetUsersByChatId(ctx context.Context, in *GetUsersByChatIdRequest, opts ...grpc.CallOption) (*GetUsersByChatIdResponse, error)
+	GetUsersById(ctx context.Context, in *GetUsersByIdRequest, opts ...grpc.CallOption) (*GetUsersByIdResponse, error)
 }
 
 type userClient struct {
@@ -63,9 +63,9 @@ func (c *userClient) IsAdmin(ctx context.Context, in *IsAdminRequest, opts ...gr
 	return out, nil
 }
 
-func (c *userClient) GetUsersByChatId(ctx context.Context, in *GetUsersByChatIdRequest, opts ...grpc.CallOption) (*GetUsersByChatIdResponse, error) {
-	out := new(GetUsersByChatIdResponse)
-	err := c.cc.Invoke(ctx, "/user.User/GetUsersByChatId", in, out, opts...)
+func (c *userClient) GetUsersById(ctx context.Context, in *GetUsersByIdRequest, opts ...grpc.CallOption) (*GetUsersByIdResponse, error) {
+	out := new(GetUsersByIdResponse)
+	err := c.cc.Invoke(ctx, "/user.User/GetUsersById", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ type UserServer interface {
 	AddName(context.Context, *AddNameRequest) (*AddNameResponse, error)
 	AddPhone(context.Context, *AddPhoneRequest) (*AddPhoneResponse, error)
 	IsAdmin(context.Context, *IsAdminRequest) (*IsAdminResponse, error)
-	GetUsersByChatId(context.Context, *GetUsersByChatIdRequest) (*GetUsersByChatIdResponse, error)
+	GetUsersById(context.Context, *GetUsersByIdRequest) (*GetUsersByIdResponse, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -96,8 +96,8 @@ func (UnimplementedUserServer) AddPhone(context.Context, *AddPhoneRequest) (*Add
 func (UnimplementedUserServer) IsAdmin(context.Context, *IsAdminRequest) (*IsAdminResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IsAdmin not implemented")
 }
-func (UnimplementedUserServer) GetUsersByChatId(context.Context, *GetUsersByChatIdRequest) (*GetUsersByChatIdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUsersByChatId not implemented")
+func (UnimplementedUserServer) GetUsersById(context.Context, *GetUsersByIdRequest) (*GetUsersByIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUsersById not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -166,20 +166,20 @@ func _User_IsAdmin_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_GetUsersByChatId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUsersByChatIdRequest)
+func _User_GetUsersById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUsersByIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).GetUsersByChatId(ctx, in)
+		return srv.(UserServer).GetUsersById(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user.User/GetUsersByChatId",
+		FullMethod: "/user.User/GetUsersById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).GetUsersByChatId(ctx, req.(*GetUsersByChatIdRequest))
+		return srv.(UserServer).GetUsersById(ctx, req.(*GetUsersByIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -204,8 +204,8 @@ var User_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _User_IsAdmin_Handler,
 		},
 		{
-			MethodName: "GetUsersByChatId",
-			Handler:    _User_GetUsersByChatId_Handler,
+			MethodName: "GetUsersById",
+			Handler:    _User_GetUsersById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

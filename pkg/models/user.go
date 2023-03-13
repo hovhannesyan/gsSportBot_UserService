@@ -1,7 +1,7 @@
 package models
 
 type User struct {
-	ChatID   int64   `json:"chat_id" gorm:"primaryKey"`
+	Id       int64   `json:"id" gorm:"primaryKey"`
 	Username string  `json:"username"`
 	Name     *string `json:"name"`
 	Phone    *string `json:"phone"`

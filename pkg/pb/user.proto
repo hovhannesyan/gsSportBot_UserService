@@ -10,11 +10,11 @@ service User {
 
   rpc IsAdmin (IsAdminRequest) returns (IsAdminResponse) {}
 
-  rpc GetUsersByChatId (GetUsersByChatIdRequest) returns (GetUsersByChatIdResponse) {}
+  rpc GetUsersById (GetUsersByIdRequest) returns (GetUsersByIdResponse) {}
 }
 
 message AddNameRequest {
-  int64 chatId = 1;
+  int64 id = 1;
   string username = 2;
   string name = 3;
 }
@@ -24,7 +24,7 @@ message AddNameResponse {
 }
 
 message AddPhoneRequest {
-  int64 chatId = 1;
+  int64 id = 1;
   string phone = 2;
 }
 
@@ -33,15 +33,15 @@ message AddPhoneResponse {
 }
 
 message IsAdminRequest {
-  int64 chatId = 1;
+  int64 id = 1;
 }
 
 message IsAdminResponse {
   bool isAdmin = 1;
 }
 
-message GetUsersByChatIdRequest {
-  repeated int64 chatId = 1;
+message GetUsersByIdRequest {
+  repeated int64 id = 1;
 }
 
 message UserData {
@@ -50,6 +50,6 @@ message UserData {
   string phone = 3;
 }
 
-message GetUsersByChatIdResponse {
+message GetUsersByIdResponse {
   repeated UserData data = 1;
 }

@@ -14,7 +14,7 @@ type Server struct {
 
 func (s *Server) AddName(ctx context.Context, req *pb.AddNameRequest) (*pb.AddNameResponse, error) {
 	user := models.User{
-		ChatID:   req.ChatId,
+		Id:       req.Id,
 		Username: req.Username,
 		Name:     &req.Name,
 	}
@@ -32,11 +32,11 @@ func (s *Server) AddName(ctx context.Context, req *pb.AddNameRequest) (*pb.AddNa
 
 func (s *Server) AddPhone(ctx context.Context, req *pb.AddPhoneRequest) (*pb.AddPhoneResponse, error) {
 	user := models.User{
-		ChatID: req.ChatId,
-		Phone:  &req.Phone,
+		Id:    req.Id,
+		Phone: &req.Phone,
 	}
 
-	if err := s.DbHandler.DB.Where(&models.User{ChatID: user.ChatID}).Updates(&user).Error; err != nil {
+	if err := s.DbHandler.DB.Where(&models.User{Id: user.Id}).Updates(&user).Error; err != nil {
 		return &pb.AddPhoneResponse{
 			Message: "smth happened...",
 		}, err
@@ -50,7 +50,7 @@ func (s *Server) AddPhone(ctx context.Context, req *pb.AddPhoneRequest) (*pb.Add
 func (s *Server) IsAdmin(ctx context.Context, req *pb.IsAdminRequest) (*pb.IsAdminResponse, error) {
 	var user models.User
 
-	if err := s.DbHandler.DB.Where(&models.User{ChatID: req.ChatId}).First(&user).Error; err != nil {
+	if err := s.DbHandler.DB.Where(&models.User{Id: req.Id}).First(&user).Error; err != nil {
 		return nil, err
 	}
 
@@ -59,10 +59,10 @@ func (s *Server) IsAdmin(ctx context.Context, req *pb.IsAdminRequest) (*pb.IsAdm
 	}, nil
 }
 
-func (s *Server) GetUsersByChatId(ctx context.Context, req *pb.GetUsersByChatIdRequest) (*pb.GetUsersByChatIdResponse, error) {
+func (s *Server) GetUsersById(ctx context.Context, req *pb.GetUsersByIdRequest) (*pb.GetUsersByIdResponse, error) {
 	var users []models.User
 
-	if err := s.DbHandler.DB.Where("chat_id in (?)", req.ChatId).Find(&users).Error; err != nil {
+	if err := s.DbHandler.DB.Where("chat_id in (?)", req.Id).Find(&users).Error; err != nil {
 		return nil, err
 	}
 
@@ -75,7 +75,7 @@ func (s *Server) GetUsersByChatId(ctx context.Context, req *pb.GetUsersByChatIdR
 		}
 	}
 
-	return &pb.GetUsersByChatIdResponse{
+	return &pb.GetUsersByIdResponse{
 		Data: data,
 	}, nil
 }
