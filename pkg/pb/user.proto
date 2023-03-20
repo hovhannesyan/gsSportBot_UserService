@@ -5,30 +5,22 @@ package user;
 option go_package = "./pkg/pb";
 
 service User {
-  rpc AddName (AddNameRequest) returns (AddNameResponse) {}
-  rpc AddPhone (AddPhoneRequest) returns (AddPhoneResponse) {}
+  rpc AddUser (AddUserRequest) returns (AddUserResponse) {}
 
   rpc IsAdmin (IsAdminRequest) returns (IsAdminResponse) {}
 
   rpc GetUsersById (GetUsersByIdRequest) returns (GetUsersByIdResponse) {}
 }
 
-message AddNameRequest {
+message AddUserRequest {
   int64 id = 1;
   string username = 2;
   string name = 3;
+  string phone = 4;
+  bool isAdmin = 5;
 }
 
-message AddNameResponse {
-  string message = 1;
-}
-
-message AddPhoneRequest {
-  int64 id = 1;
-  string phone = 2;
-}
-
-message AddPhoneResponse {
+message AddUserResponse {
   string message = 1;
 }
 
@@ -45,9 +37,11 @@ message GetUsersByIdRequest {
 }
 
 message UserData {
-  string username = 1;
-  string name = 2;
-  string phone = 3;
+  int64 id = 1;
+  string username = 2;
+  string name = 3;
+  string phone = 4;
+  bool isAdmin = 5;
 }
 
 message GetUsersByIdResponse {

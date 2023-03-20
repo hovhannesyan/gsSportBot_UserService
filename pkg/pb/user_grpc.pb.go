@@ -22,8 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
-	AddName(ctx context.Context, in *AddNameRequest, opts ...grpc.CallOption) (*AddNameResponse, error)
-	AddPhone(ctx context.Context, in *AddPhoneRequest, opts ...grpc.CallOption) (*AddPhoneResponse, error)
+	AddUser(ctx context.Context, in *AddUserRequest, opts ...grpc.CallOption) (*AddUserResponse, error)
 	IsAdmin(ctx context.Context, in *IsAdminRequest, opts ...grpc.CallOption) (*IsAdminResponse, error)
 	GetUsersById(ctx context.Context, in *GetUsersByIdRequest, opts ...grpc.CallOption) (*GetUsersByIdResponse, error)
 }
@@ -36,18 +35,9 @@ func NewUserClient(cc grpc.ClientConnInterface) UserClient {
 	return &userClient{cc}
 }
 
-func (c *userClient) AddName(ctx context.Context, in *AddNameRequest, opts ...grpc.CallOption) (*AddNameResponse, error) {
-	out := new(AddNameResponse)
-	err := c.cc.Invoke(ctx, "/user.User/AddName", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userClient) AddPhone(ctx context.Context, in *AddPhoneRequest, opts ...grpc.CallOption) (*AddPhoneResponse, error) {
-	out := new(AddPhoneResponse)
-	err := c.cc.Invoke(ctx, "/user.User/AddPhone", in, out, opts...)
+func (c *userClient) AddUser(ctx context.Context, in *AddUserRequest, opts ...grpc.CallOption) (*AddUserResponse, error) {
+	out := new(AddUserResponse)
+	err := c.cc.Invoke(ctx, "/user.User/AddUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,8 +66,7 @@ func (c *userClient) GetUsersById(ctx context.Context, in *GetUsersByIdRequest, 
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
 type UserServer interface {
-	AddName(context.Context, *AddNameRequest) (*AddNameResponse, error)
-	AddPhone(context.Context, *AddPhoneRequest) (*AddPhoneResponse, error)
+	AddUser(context.Context, *AddUserRequest) (*AddUserResponse, error)
 	IsAdmin(context.Context, *IsAdminRequest) (*IsAdminResponse, error)
 	GetUsersById(context.Context, *GetUsersByIdRequest) (*GetUsersByIdResponse, error)
 	mustEmbedUnimplementedUserServer()
@@ -87,11 +76,8 @@ type UserServer interface {
 type UnimplementedUserServer struct {
 }
 
-func (UnimplementedUserServer) AddName(context.Context, *AddNameRequest) (*AddNameResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddName not implemented")
-}
-func (UnimplementedUserServer) AddPhone(context.Context, *AddPhoneRequest) (*AddPhoneResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddPhone not implemented")
+func (UnimplementedUserServer) AddUser(context.Context, *AddUserRequest) (*AddUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddUser not implemented")
 }
 func (UnimplementedUserServer) IsAdmin(context.Context, *IsAdminRequest) (*IsAdminResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IsAdmin not implemented")
@@ -112,38 +98,20 @@ func RegisterUserServer(s grpc.ServiceRegistrar, srv UserServer) {
 	s.RegisterService(&User_ServiceDesc, srv)
 }
 
-func _User_AddName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddNameRequest)
+func _User_AddUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).AddName(ctx, in)
+		return srv.(UserServer).AddUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user.User/AddName",
+		FullMethod: "/user.User/AddUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).AddName(ctx, req.(*AddNameRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _User_AddPhone_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddPhoneRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServer).AddPhone(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/user.User/AddPhone",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).AddPhone(ctx, req.(*AddPhoneRequest))
+		return srv.(UserServer).AddUser(ctx, req.(*AddUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -192,12 +160,8 @@ var User_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddName",
-			Handler:    _User_AddName_Handler,
-		},
-		{
-			MethodName: "AddPhone",
-			Handler:    _User_AddPhone_Handler,
+			MethodName: "AddUser",
+			Handler:    _User_AddUser_Handler,
 		},
 		{
 			MethodName: "IsAdmin",
